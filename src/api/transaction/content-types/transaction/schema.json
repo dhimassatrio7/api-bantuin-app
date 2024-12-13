@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "transactions",
+  "info": {
+    "singularName": "transaction",
+    "pluralName": "transactions",
+    "displayName": "Transaction",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "customer": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::customer.customer"
+    },
+    "service": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::service.service"
+    },
+    "transaction_status": {
+      "type": "enumeration",
+      "enum": [
+        "Pending",
+        "Completed",
+        "Cancelled"
+      ]
+    },
+    "order_date": {
+      "type": "datetime"
+    }
+  }
+}

@@ -372,6 +372,7 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
 export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
   collectionName: 'categories';
   info: {
+    description: '';
     displayName: 'Category';
     pluralName: 'categories';
     singularName: 'category';
@@ -395,6 +396,40 @@ export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+  };
+}
+
+export interface ApiCustomerCustomer extends Struct.CollectionTypeSchema {
+  collectionName: 'customers';
+  info: {
+    displayName: 'Customer';
+    pluralName: 'customers';
+    singularName: 'customer';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    address: Schema.Attribute.String;
+    contact: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::customer.customer'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    user: Schema.Attribute.Relation<
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
   };
 }
 
@@ -451,16 +486,59 @@ export interface ApiServiceService extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    category: Schema.Attribute.Relation<'oneToOne', 'api::category.category'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::service.service'
     > &
       Schema.Attribute.Private;
+    price: Schema.Attribute.Decimal;
     publishedAt: Schema.Attribute.DateTime;
+    service_description: Schema.Attribute.Blocks;
+    service_name: Schema.Attribute.String;
+    service_provider: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::service-provider.service-provider'
+    >;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiTransactionTransaction extends Struct.CollectionTypeSchema {
+  collectionName: 'transactions';
+  info: {
+    description: '';
+    displayName: 'Transaction';
+    pluralName: 'transactions';
+    singularName: 'transaction';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    customer: Schema.Attribute.Relation<'oneToMany', 'api::customer.customer'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::transaction.transaction'
+    > &
+      Schema.Attribute.Private;
+    order_date: Schema.Attribute.DateTime;
+    publishedAt: Schema.Attribute.DateTime;
+    service: Schema.Attribute.Relation<'oneToOne', 'api::service.service'>;
+    transaction_status: Schema.Attribute.Enumeration<
+      ['Pending', 'Completed', 'Cancelled']
+    >;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -977,8 +1055,10 @@ declare module '@strapi/strapi' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
       'api::category.category': ApiCategoryCategory;
+      'api::customer.customer': ApiCustomerCustomer;
       'api::service-provider.service-provider': ApiServiceProviderServiceProvider;
       'api::service.service': ApiServiceService;
+      'api::transaction.transaction': ApiTransactionTransaction;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

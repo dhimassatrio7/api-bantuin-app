@@ -11,5 +11,35 @@
     "draftAndPublish": true
   },
   "pluginOptions": {},
-  "attributes": {}
+  "attributes": {
+    "service_provider": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::service-provider.service-provider"
+    },
+    "category": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::category.category"
+    },
+    "service_name": {
+      "type": "string"
+    },
+    "service_description": {
+      "type": "blocks"
+    },
+    "price": {
+      "type": "decimal"
+    },
+    "image": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
 }
